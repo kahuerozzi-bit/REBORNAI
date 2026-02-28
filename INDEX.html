@@ -882,6 +882,223 @@
     .hero-stats { flex-direction: column; gap: 24px; }
     .stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 0; }
   }
+
+  /* ═══ GUERRILHA AI ══════════════════════════════════ */
+  #guerrilha { background: var(--black); padding: 0; min-height: auto; border-bottom: none; overflow: hidden; }
+  .guerrilha-hero { background: var(--black); padding: 100px 48px 60px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .guerrilha-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,85,255,0.10) 0%, transparent 70%); pointer-events: none; }
+  .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(0,85,255,0.12); transform: translate(-50%, -50%); animation: ring-pulse 3s ease-out infinite; top: 50%; left: 50%; }
+  .ring:nth-child(1){width:300px;height:300px;animation-delay:0s}.ring:nth-child(2){width:550px;height:550px;animation-delay:.7s}.ring:nth-child(3){width:800px;height:800px;animation-delay:1.4s}.ring:nth-child(4){width:1050px;height:1050px;animation-delay:2.1s}
+  @keyframes ring-pulse{0%{opacity:.7;transform:translate(-50%,-50%) scale(.7)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.1)}}
+  .meme-particles{position:absolute;top:0;right:0;width:45%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+  .meme-particle{position:absolute;font-family:'Bebas Neue',sans-serif;color:rgba(0,85,255,.09);animation:float-meme linear infinite;white-space:nowrap}
+  @keyframes float-meme{from{transform:translateY(120%) rotate(-12deg);opacity:0}10%{opacity:1}90%{opacity:1}to{transform:translateY(-120%) rotate(-12deg);opacity:0}}
+  .guerrilha-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(0,85,255,.1);border:1px solid rgba(0,85,255,.3);padding:6px 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:32px;position:relative;z-index:2}
+  .guerrilha-tag-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:blink .8s step-end infinite;box-shadow:0 0 8px var(--red-glow)}
+  .guerrilha-title{position:relative;z-index:2}
+  .guerrilha-title h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,9vw,116px);line-height:.9;letter-spacing:2px;margin-bottom:24px}
+  .guerrilha-title h2 .blast{color:var(--red)}
+  .guerrilha-title h2 .outline{-webkit-text-stroke:1px rgba(242,242,242,.25);color:transparent}
+  .guerrilha-subtitle{font-size:18px;font-weight:300;color:rgba(242,242,242,.6);max-width:620px;line-height:1.7}
+  .guerrilha-subtitle strong{color:var(--white);font-weight:600}
+
+  /* TRENDS */
+  .trends-section{padding:80px 48px;background:var(--deep);border-top:1px solid var(--border)}
+  .trends-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .trends-label::after{content:'';flex:1;max-width:48px;height:1px;background:var(--red)}
+  .trends-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px}
+  .trends-header h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,72px);line-height:.95;letter-spacing:1px}
+  .trends-header h2 .dim{color:var(--muted)}
+  .trends-live{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:10px;color:var(--grey);letter-spacing:2px}
+  .trends-live-dot{width:8px;height:8px;background:#00ff88;border-radius:50%;box-shadow:0 0 8px #00ff88;animation:blink 1s step-end infinite}
+  .trends-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+  .trend-card{background:var(--surface);position:relative;overflow:hidden;transition:background .3s}
+  .trend-card:hover{background:#1c1c1c}
+
+  /* IMAGE SLOTS */
+  .trend-visual{height:220px;position:relative;overflow:hidden}
+  .trend-img-wrap{width:100%;height:100%;position:relative;background:#0a0a0a}
+  .trend-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+  .trend-card:hover .trend-img{transform:scale(1.04)}
+  .trend-img-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:2px dashed var(--border)}
+  .trend-img-wrap:not(.img-missing) .trend-img-placeholder{display:none}
+  .tip-icon{font-size:40px;filter:grayscale(1);opacity:.5}
+  .tip-name{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--grey);letter-spacing:2px}
+  .tip-file{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);background:var(--black);padding:4px 10px;border:1px solid var(--border)}
+
+  .trend-badge{position:absolute;top:12px;left:12px;background:var(--red);color:var(--white);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 8px;z-index:10}
+  .trend-rank{position:absolute;bottom:10px;left:12px;font-family:'Bebas Neue',sans-serif;font-size:44px;color:rgba(255,255,255,.1);line-height:1;z-index:10}
+  .trend-content{padding:24px 24px 0}
+  .trend-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--white);margin-bottom:6px;line-height:1}
+  .trend-desc{font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:18px}
+
+  /* PROMPT */
+  .prompt-box{background:var(--black);border:1px solid rgba(0,85,255,.2);border-left:3px solid var(--red);padding:14px;margin-bottom:12px}
+  .prompt-box-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:8px}
+  .prompt-text{font-family:'Space Mono',monospace;font-size:9px;color:rgba(242,242,242,.7);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+  .prompt-text .var{color:var(--red);font-weight:700}
+  .copy-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(0,85,255,.1);border:1px solid rgba(0,85,255,.3);color:var(--red);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;padding:8px 16px;cursor:pointer;text-transform:uppercase;transition:all .2s;margin-bottom:24px;width:100%;justify-content:center}
+  .copy-btn:hover{background:var(--red);color:var(--white);border-color:var(--red)}
+  .copy-btn.copied{background:#00ff88;color:#000;border-color:#00ff88}
+  .copy-icon{font-size:12px}
+
+  /* CANDIDATO AI */
+  .candidato-section{padding:80px 48px;background:var(--black);border-top:1px solid var(--border);position:relative;overflow:hidden}
+  .candidato-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 100% 50%,rgba(0,85,255,.06),transparent);pointer-events:none}
+  .candidato-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:2}
+  .candidato-visual{position:relative;height:400px;display:flex;align-items:center;justify-content:center}
+  .ai-orb{position:absolute;border-radius:50%;animation:rotate-orb 5s linear infinite}
+  @keyframes rotate-orb{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .ai-orb::before{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--black)}
+  .ai-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:2}
+  .ai-face{font-size:68px;display:block;margin-bottom:8px;filter:drop-shadow(0 0 24px rgba(0,85,255,.9))}
+  .ai-face-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--red)}
+  .candidato-orbit{position:absolute;border-radius:50%;border:1px dashed rgba(0,85,255,.2);top:50%;left:50%;transform:translate(-50%,-50%)}
+  .candidato-orbit-dot{position:absolute;width:8px;height:8px;background:var(--red);border-radius:50%;box-shadow:0 0 8px var(--red-glow);top:-4px;left:50%;transform:translateX(-50%)}
+  .orbit-1{width:180px;height:180px;animation:orbit-spin 5s linear infinite}
+  .orbit-2{width:270px;height:270px;animation:orbit-spin 9s linear infinite reverse}
+  .orbit-3{width:360px;height:360px;animation:orbit-spin 14s linear infinite}
+  @keyframes orbit-spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+  .candidato-content h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,68px);line-height:.95;letter-spacing:1px;margin-bottom:20px}
+  .candidato-content p{font-size:15px;color:rgba(242,242,242,.65);line-height:1.75;margin-bottom:28px}
+  .candidato-content p strong{color:var(--white);font-weight:600}
+  .candidato-features{display:flex;flex-direction:column;gap:0;margin-bottom:36px}
+  .candidato-feature{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+  .candidato-feature:first-child{border-top:1px solid var(--border)}
+  .cf-icon{width:34px;height:34px;background:rgba(0,85,255,.1);border:1px solid rgba(0,85,255,.2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .cf-text{font-size:13px;color:rgba(242,242,242,.75);line-height:1.5}
+  .cf-text strong{color:var(--white);font-weight:600;display:block;margin-bottom:1px}
+
+  /* STEPS */
+  .guerrilha-steps{padding:60px 48px 80px;background:var(--deep);border-top:1px solid var(--border)}
+  .steps-row{display:flex;align-items:stretch;margin-top:48px}
+  .step-item{flex:1;padding:28px;border-right:1px solid var(--border);position:relative}
+  .step-item:last-child{border-right:none}
+  .step-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(0,85,255,.1);line-height:1;margin-bottom:-12px}
+  .step-icon{font-size:26px;margin-bottom:12px;display:block}
+  .step-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--white);margin-bottom:8px}
+  .step-text{font-size:12px;color:var(--grey);line-height:1.7}
+  .step-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;z-index:2}
+  .step-item:last-child .step-arrow{display:none}
+
+  @media(max-width:900px){
+    .trends-grid{grid-template-columns:1fr}
+    .candidato-grid{grid-template-columns:1fr}
+    .candidato-visual{height:260px}
+    .steps-row{flex-direction:column}
+    .step-item{border-right:none;border-bottom:1px solid var(--border)}
+    .step-arrow{display:none}
+    .guerrilha-hero,.trends-section,.candidato-section,.guerrilha-steps{padding-left:24px;padding-right:24px}
+  }
+
+
+  /* ═══ IMAGE PLACEHOLDERS ═══════════════════════════════════ */
+  .img-slot {
+    position: relative;
+    overflow: hidden;
+    background: #0a0a0a;
+  }
+  .img-slot img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .img-slot:hover img { transform: scale(1.03); }
+  .img-slot .ph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 2px dashed #1e2a3a;
+    background: linear-gradient(135deg, #070b10 0%, #0a0f18 100%);
+    padding: 20px;
+    text-align: center;
+  }
+  /* Hide placeholder when image loads */
+  .img-slot img:not([src=""]):not([src]) + .ph,
+  .img-slot img.loaded + .ph { display: none; }
+  .ph-icon { font-size: 32px; opacity: 0.5; }
+  .ph-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #2a4a6a;
+  }
+  .ph-file {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #0055FF;
+    background: rgba(0,85,255,0.08);
+    border: 1px solid rgba(0,85,255,0.2);
+    padding: 4px 10px;
+    letter-spacing: 1px;
+  }
+  .ph-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    color: #2a3a4a;
+    max-width: 200px;
+    line-height: 1.5;
+  }
+  .ph-size {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: #1a2a3a;
+    letter-spacing: 1px;
+  }
+
+  /* HERO BG IMAGE */
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-bg-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.18;
+    filter: saturate(0.3) brightness(0.5);
+  }
+  .hero-bg-img .ph {
+    border: none;
+    background: transparent;
+  }
+  .hero-bg-img .ph-title { color: #1a3a5a; font-size: 11px; }
+
+  /* PAIN IMAGE */
+  .pain-img-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 40px;
+  }
+  .pain-img-slot {
+    height: 160px;
+  }
+
+  /* MODULES BG */
+  .modules-bg-img {
+    position: absolute;
+    right: 0; top: 0;
+    width: 35%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .modules-bg-img img { width:100%;height:100%;object-fit:cover;opacity:0.08; }
+  .modules-bg-img .ph { border: none; background: transparent; }
+  .modules-bg-img .ph-title { color: #1a2a3a; font-size: 10px; }
+
+  /* WHY IMAGE */
+  .why-img-slot {
+    width: 100%; height: 380px;
+    border: 1px solid var(--border);
+  }
+
 </style>
 </head>
 <body>
@@ -892,11 +1109,24 @@
 
 <nav>
   <div class="nav-logo">REBORN <span>AI</span></div>
-  <div class="nav-badge">POWERED BY MAGNOPUS STANDARD</div>
+  <div class="nav-badge">POWERED BY REBORN AI STANDARD</div>
 </nav>
 
 <!-- HERO -->
+
 <section id="hero">
+  <div class="hero-bg-img img-slot">
+    <img src="img/hero-bg.jpg" alt="War room monitoramento AI"
+      onload="this.classList.add('loaded')"
+      onerror="this.style.display='none'">
+    <div class="ph">
+      <div class="ph-icon">🖥️</div>
+      <div class="ph-title">IMAGEM DE FUNDO — HERO</div>
+      <div class="ph-file">img/hero-bg.jpg</div>
+      <div class="ph-desc">War room, telas com dados, monitoramento em tempo real, tech dark</div>
+      <div class="ph-size">IDEAL: 1920×1080px — JPG</div>
+    </div>
+  </div>
   <div class="hero-grid"></div>
   <div class="hero-scan"></div>
   <div class="hero-content">
@@ -925,7 +1155,6 @@
   </div>
 </section>
 
-<!-- PAIN -->
 <section id="pain">
   <div class="section-label">O problema</div>
   <h2>A REALIDADE<br><span class="dim">QUE VOCÊ VIVE HOJE</span></h2>
@@ -946,9 +1175,44 @@
       <p class="pain-text">O candidato não grava tudo. A equipe não produz o suficiente. Enquanto isso, o adversário aparece todos os dias, em todos os lugares, com mensagem afinada.</p>
     </div>
   </div>
+  <div class="pain-img-row">
+    <div class="pain-img-slot img-slot">
+      <img src="img/pain-01.jpg" alt="Crise viral redes sociais"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">📱</div>
+        <div class="ph-title">DOR 01 — CRISE VIRAL</div>
+        <div class="ph-file">img/pain-01.jpg</div>
+        <div class="ph-desc">Print de post viral, trending, comentários explosivos</div>
+        <div class="ph-size">800×400px — JPG</div>
+      </div>
+    </div>
+    <div class="pain-img-slot img-slot">
+      <img src="img/pain-02.jpg" alt="Mensagem genérica sem alcance"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">📢</div>
+        <div class="ph-title">DOR 02 — MENSAGEM GENÉRICA</div>
+        <div class="ph-file">img/pain-02.jpg</div>
+        <div class="ph-desc">Outdoor vazio, palanque sem público, comício fraco</div>
+        <div class="ph-size">800×400px — JPG</div>
+      </div>
+    </div>
+    <div class="pain-img-slot img-slot">
+      <img src="img/pain-03.jpg" alt="Candidato sem escala de produção"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">⏱️</div>
+        <div class="ph-title">DOR 03 — SEM ESCALA</div>
+        <div class="ph-file">img/pain-03.jpg</div>
+        <div class="ph-desc">Equipe pequena sobrecarregada, mesa de trabalho, notebook</div>
+        <div class="ph-size">800×400px — JPG</div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
-<!-- PROMISE -->
 <section id="promise">
   <div class="section-label" style="color: rgba(255,255,255,0.6);">A promessa</div>
   <h2>REBORN AI<br>TRANSFORMA<br>CAOS EM CONTROLE</h2>
@@ -972,9 +1236,210 @@
   </div>
 </section>
 
+<!-- ═══ GUERRILHA AI ══════════════════════════════════════════════════ -->
+<section id="guerrilha">
+
+  <!-- HERO BOMB -->
+  <div class="guerrilha-hero">
+    <div style="position:absolute;top:40%;left:65%;pointer-events:none;z-index:0">
+      <div class="ring"></div><div class="ring"></div>
+      <div class="ring"></div><div class="ring"></div>
+    </div>
+    <div class="meme-particles">
+      <span class="meme-particle" style="font-size:80px;left:10%;animation-duration:9s;animation-delay:0s">VIRAL</span>
+      <span class="meme-particle" style="font-size:50px;left:50%;animation-duration:7s;animation-delay:2s">TREND</span>
+      <span class="meme-particle" style="font-size:100px;left:25%;animation-duration:11s;animation-delay:1s">MEME</span>
+      <span class="meme-particle" style="font-size:60px;left:70%;animation-duration:8s;animation-delay:3s">IA</span>
+      <span class="meme-particle" style="font-size:40px;left:5%;animation-duration:10s;animation-delay:4s">2026</span>
+      <span class="meme-particle" style="font-size:70px;left:40%;animation-duration:6s;animation-delay:5s">GPT</span>
+    </div>
+    <div class="guerrilha-title">
+      <div class="guerrilha-tag">
+        <div class="guerrilha-tag-dot"></div>
+        MÓDULO GUERRILHA AI
+      </div>
+      <h2>EXPLOSÃO<br>DE <span class="blast">MEMES</span><br><span class="outline">VIRAIS</span></h2>
+      <p class="guerrilha-subtitle">
+        Transforme qualquer trend em <strong>munição política</strong>.<br>
+        Seu apoiador cola o prompt, gera o conteúdo e dispara.<br>
+        A campanha escala <strong>sem depender de equipe</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- TOP 3 TRENDS -->
+  <div class="trends-section">
+    <div class="trends-label">Prompts prontos</div>
+    <div class="trends-header">
+      <h2>TOP 3 TRENDS<br><span class="dim">DE IA AGORA</span></h2>
+      <div class="trends-live"><div class="trends-live-dot"></div>ATUALIZADO EM TEMPO REAL</div>
+    </div>
+
+    <div class="trends-grid">
+
+      <!-- TREND 1: GHIBLI -->
+      <div class="trend-card">
+        <div class="trend-visual">
+          <div class="trend-img-wrap">
+            <img src="img/trend-ghibli.jpg" alt="Trend Ghibli AI" class="trend-img"
+              onerror="this.parentNode.classList.add('img-missing'); this.style.display='none'">
+            <div class="trend-img-placeholder">
+              <div class="tip-icon">🏯</div>
+              <div class="tip-name">MODO GHIBLI</div>
+              <div class="tip-file">img/trend-ghibli.jpg</div>
+            </div>
+          </div>
+          <div class="trend-badge">🔥 TREND #1</div>
+          <div class="trend-rank">01</div>
+        </div>
+        <div class="trend-content">
+          <div class="trend-name">MODO GHIBLI</div>
+          <div class="trend-desc">Candidato no universo Ghibli — aquarela, mágico, emocional. O trend que dominou o mundo.</div>
+          <div class="prompt-box">
+            <div class="prompt-box-label"><span>📋 PROMPT — ChatGPT / Midjourney / Gemini</span></div>
+            <div class="prompt-text" id="prompt-ghibli">Create a Studio Ghibli animated-style illustration of a Brazilian politician named <span class="var">[NOME DO CANDIDATO]</span>. Standing in a magical whimsical landscape with soft watercolor tones, gentle wind, glowing warm light. Warm trustworthy expression, wearing <span class="var">[ROUPA]</span>. Background: rolling hills, small town, hopeful sky. Style: Hayao Miyazaki, soft pastel palette, cinematic. Caption: <span class="var">"[SLOGAN DA CAMPANHA]"</span></div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt('prompt-ghibli', this)"><span class="copy-icon">⎘</span> COPIAR PROMPT</button>
+        </div>
+      </div>
+
+      <!-- TREND 2: BRIDGERTON -->
+      <div class="trend-card">
+        <div class="trend-visual">
+          <div class="trend-img-wrap">
+            <img src="img/trend-bridgerton.jpg" alt="Trend Bridgerton AI" class="trend-img"
+              onerror="this.parentNode.classList.add('img-missing'); this.style.display='none'">
+            <div class="trend-img-placeholder">
+              <div class="tip-icon">👑</div>
+              <div class="tip-name">MODO BRIDGERTON</div>
+              <div class="tip-file">img/trend-bridgerton.jpg</div>
+            </div>
+          </div>
+          <div class="trend-badge">🔥 TREND #2</div>
+          <div class="trend-rank">02</div>
+        </div>
+        <div class="trend-content">
+          <div class="trend-name">MODO BRIDGERTON</div>
+          <div class="trend-desc">Candidato em pintura de época. Luxo, autoridade, presença de líder. Viral no Brasil e no mundo.</div>
+          <div class="prompt-box">
+            <div class="prompt-box-label"><span>📋 PROMPT — ChatGPT / Midjourney / Gemini</span></div>
+            <div class="prompt-text" id="prompt-bridgerton">Create a Bridgerton-style oil painting portrait of a Brazilian politician named <span class="var">[NOME DO CANDIDATO]</span>. Regency era aesthetic, ornate golden frame, candlelit ballroom background, deep blue and gold tones. Noble dignified posture, elegant period attire. Rich textures, dramatic lighting. Ribbon with: <span class="var">"[SLOGAN DA CAMPANHA]"</span>. Style: classical portrait, cinematic, 8k.</div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt('prompt-bridgerton', this)"><span class="copy-icon">⎘</span> COPIAR PROMPT</button>
+        </div>
+      </div>
+
+      <!-- TREND 3: CYBER IA -->
+      <div class="trend-card">
+        <div class="trend-visual">
+          <div class="trend-img-wrap">
+            <img src="img/trend-cyber.jpg" alt="Trend Cyber AI" class="trend-img"
+              onerror="this.parentNode.classList.add('img-missing'); this.style.display='none'">
+            <div class="trend-img-placeholder">
+              <div class="tip-icon">🤖</div>
+              <div class="tip-name">MODO CYBER IA</div>
+              <div class="tip-file">img/trend-cyber.jpg</div>
+            </div>
+          </div>
+          <div class="trend-badge">🔥 TREND #3</div>
+          <div class="trend-rank">03</div>
+        </div>
+        <div class="trend-content">
+          <div class="trend-name">MODO CYBER IA</div>
+          <div class="trend-desc">Candidato como líder futurista. Tech, visão, candidato da inovação. Conecta com jovens.</div>
+          <div class="prompt-box">
+            <div class="prompt-box-label"><span>📋 PROMPT — ChatGPT / Midjourney / Gemini</span></div>
+            <div class="prompt-text" id="prompt-cyber">Create a cyberpunk-style portrait of Brazilian politician <span class="var">[NOME DO CANDIDATO]</span> as a visionary tech leader. Holographic elements, neon blue and electric cyan glow, dark background with circuit patterns. HUD overlay showing data and name <span class="var">[NOME]</span>. Background: future Brazil city skyline at night. Text: <span class="var">"[SLOGAN]"</span>. Style: Blade Runner, cinematic sci-fi, ultra-detailed, 8k.</div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt('prompt-cyber', this)"><span class="copy-icon">⎘</span> COPIAR PROMPT</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CANDIDATO AI -->
+  <div class="candidato-section">
+    <div class="candidato-grid">
+      <div class="candidato-visual">
+        <div class="candidato-orbit orbit-1"><div class="candidato-orbit-dot"></div></div>
+        <div class="candidato-orbit orbit-2"><div class="candidato-orbit-dot"></div></div>
+        <div class="candidato-orbit orbit-3"><div class="candidato-orbit-dot"></div></div>
+        <div class="ai-orb" style="width:140px;height:140px;background:conic-gradient(from 0deg,#0055FF,#001a99,#0055FF)">
+          <div style="position:absolute;inset:4px;border-radius:50%;background:var(--black)"></div>
+        </div>
+        <div class="ai-inner">
+          <span class="ai-face">🧬</span>
+          <span class="ai-face-label">CANDIDATO.AI</span>
+        </div>
+      </div>
+      <div class="candidato-content">
+        <div class="section-label">Replicar o Candidato</div>
+        <h2>SEU CANDIDATO<br>EM QUALQUER<br>TREND</h2>
+        <p>O apoiador entra no ChatGPT, Midjourney ou qualquer IA, <strong>cola o prompt</strong>, preenche o nome e o slogan. Em segundos gera conteúdo que parece produção profissional.</p>
+        <div class="candidato-features">
+          <div class="candidato-feature"><div class="cf-icon">⚡</div><div class="cf-text"><strong>Geração em segundos</strong>Qualquer apoiador produz — sem designer, sem agência</div></div>
+          <div class="candidato-feature"><div class="cf-icon">📡</div><div class="cf-text"><strong>Escala viral orgânica</strong>Cada apoiador vira um núcleo de distribuição autônomo</div></div>
+          <div class="candidato-feature"><div class="cf-icon">🎯</div><div class="cf-text"><strong>Sempre no trend</strong>Plataforma atualiza prompts conforme o que está bombando</div></div>
+          <div class="candidato-feature"><div class="cf-icon">🛡️</div><div class="cf-text"><strong>Mensagem controlada</strong>Prompt garante slogan e tom certo em todo conteúdo gerado</div></div>
+        </div>
+        <a href="#" class="hero-cta" style="display:inline-flex">Acessar banco de prompts →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="guerrilha-steps">
+    <div class="section-label">Como funciona</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,68px);line-height:.95">GUERRILHA<br><span style="color:var(--muted)">EM 4 PASSOS</span></h2>
+    <div class="steps-row">
+      <div class="step-item">
+        <div class="step-num">01</div>
+        <span class="step-icon">📱</span>
+        <div class="step-title">IDENTIFICA O TREND</div>
+        <p class="step-text">RADAR detecta o que está viralizando. Plataforma já tem o prompt pronto para aquele formato.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">02</div>
+        <span class="step-icon">📋</span>
+        <div class="step-title">APOIADOR COPIA</div>
+        <p class="step-text">Um clique. Prompt vai para o clipboard. Cola no ChatGPT, Midjourney ou Kling AI.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">03</div>
+        <span class="step-icon">🎨</span>
+        <div class="step-title">IA GERA O CONTEÚDO</div>
+        <p class="step-text">Imagem com o candidato no trend. Com slogan, identidade e qualidade de produção.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">04</div>
+        <span class="step-icon">💥</span>
+        <div class="step-title">DISPARA E VIRALIZA</div>
+        <p class="step-text">Apoiador posta. A rede amplifica. Candidato aparece onde o eleitor já está.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- ═══ FIM GUERRILHA ══════════════════════════════════════════════════════ -->
+
 <!-- MODULES OVERVIEW -->
-<section id="modules">
-  <div class="modules-intro">
+<section id="modules" style="position:relative">
+  <div class="modules-bg-img img-slot">
+    <img src="img/modules-bg.jpg" alt="Plataforma Reborn AI interface"
+      onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+    <div class="ph">
+      <div class="ph-icon">💻</div>
+      <div class="ph-title">FUNDO — 8 MÓDULOS</div>
+      <div class="ph-file">img/modules-bg.jpg</div>
+      <div class="ph-desc">Dashboard tech, interface dark, dados em tela</div>
+      <div class="ph-size">800×900px — JPG</div>
+    </div>
+  </div>
+  <div class="modules-intro" style="position:relative;z-index:2">
     <div class="section-label">A plataforma</div>
     <h2>8 MÓDULOS.<br><span class="dim">UM SISTEMA.</span></h2>
     <p class="section-body">Não é "ferramenta solta". É sistema integrado de campanha. Cada módulo alimenta o outro. É assim que vira vantagem injusta.</p>
@@ -1055,6 +1520,12 @@
   </div>
 </section>
 
+
+<!-- MÓDULOS DETALHADOS -->
+<section id="modulos-detalhe" style="background:var(--black);padding:40px 48px 20px;border-top:1px solid var(--border);min-height:auto">
+  <div class="section-label">Detalhe técnico</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,72px);line-height:.95;margin-bottom:48px">CADA MÓDULO<br><span style="color:var(--muted)">POR DENTRO</span></h2>
+</section>
 <!-- MODULE: RADAR -->
 <div class="module-section">
   <div class="module-header">
@@ -1472,6 +1943,8 @@
 </div>
 
 <!-- BEFORE / AFTER -->
+
+
 <section id="before-after">
   <div class="section-label">Transformação</div>
   <h2>O QUE<br><span class="dim">MUDA TUDO</span></h2>
@@ -1501,7 +1974,6 @@
   </div>
 </section>
 
-<!-- 30 DAYS -->
 <section id="thirty">
   <div class="section-label">Resultado</div>
   <h2>30 DIAS DE<br><span class="dim">PLATAFORMA ATIVA</span></h2>
@@ -1534,7 +2006,6 @@
   </div>
 </section>
 
-<!-- WHY US -->
 <section id="why">
   <div class="section-label">Por que nós</div>
   <h2>ESTRATÉGIA<br><span class="dim">DADOS<br>EXECUÇÃO</span></h2>
@@ -1569,7 +2040,19 @@
         </div>
       </div>
     </div>
-    <div class="why-visual">
+    <div class="why-visual why-img-slot img-slot">
+      <img src="img/why-team.jpg" alt="Equipe Reborn AI Magnopus"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">🎯</div>
+        <div class="ph-title">POR QUE NÓS — IMAGEM</div>
+        <div class="ph-file">img/why-team.jpg</div>
+        <div class="ph-desc">War room em operação, equipe em frente a telas, candidato sendo monitorado, dashboard ao vivo</div>
+        <div class="ph-size">IDEAL: 800×760px — JPG</div>
+      </div>
+    </div>
+    <!-- backup visual below if no image -->
+    <div class="why-visual" style="display:none">
       <span class="magnopus-badge">POWERED BY MAGNOPUS STANDARD</span>
       <div class="magnopus-title">REBORN<br><span>AI</span></div>
       <p class="magnopus-text">A única plataforma que une inteligência de dados, previsibilidade de crise e produção AI em escala — no mesmo lugar, para o mesmo objetivo: <strong style="color: var(--white);">vencer em 2026.</strong></p>
@@ -1593,10 +2076,22 @@
 
 <footer>
   <div class="footer-logo">REBORN <span>AI</span></div>
-  <div class="footer-powered">POWERED BY MAGNOPUS STANDARD • 2026</div>
+  <div class="footer-powered">POWERED BY REBORN AI STANDARD • 2026</div>
 </footer>
 
 <script>
+
+  // Copy prompt function
+  function copyPrompt(id, btn) {
+    const el = document.getElementById(id);
+    const text = el.innerText;
+    navigator.clipboard.writeText(text).catch(() => {}).then(() => {
+      btn.classList.add('copied');
+      btn.innerHTML = '<span>✓</span> COPIADO!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span class=\"copy-icon\">⎘</span> COPIAR PROMPT'; }, 2500);
+    });
+  }
+
   // Custom cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursor-ring');
