@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reborn AI — Plataforma de Marketing Político</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #080808;
+    --deep: #0e0e0e;
+    --surface: #161616;
+    --border: #1f1f1f;
+    --red: #0055FF;
+    --red-glow: #3377ff;
+    --red-dim: #0033aa;
+    --white: #f2f2f2;
+    --grey: #6b6b6b;
+    --muted: #3a3a3a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--red-glow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s;
+    box-shadow: 0 0 12px var(--red-glow);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px; height: 32px;
+    border: 1px solid rgba(0,85,255,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.18s ease;
+  }
+
+  /* NOISE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    background: rgba(8,8,8,0.9);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo span {
+    color: var(--red);
+    animation: pulse-red 2s ease-in-out infinite;
+  }
+  @keyframes pulse-red {
+    0%,100% { text-shadow: 0 0 8px var(--red-glow); }
+    50% { text-shadow: 0 0 20px var(--red-glow), 0 0 40px var(--red-dim); }
+  }
+  .nav-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+  }
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--red);
+    z-index: 9000;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 8px var(--red-glow);
+  }
+
+  /* SECTIONS */
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* HERO */
+  #hero {
+    background: var(--black);
+    overflow: hidden;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,85,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,85,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: grid-drift 20s ease-in-out infinite alternate;
+  }
+  @keyframes grid-drift {
+    from { transform: translateY(0); }
+    to { transform: translateY(20px); }
+  }
+  .hero-scan {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    animation: scan 4s linear infinite;
+    opacity: 0.6;
+  }
+  @keyframes scan {
+    from { top: -2px; }
+    to { top: 100%; }
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+  }
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--red);
+    box-shadow: 0 0 8px var(--red-glow);
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -1px;
+    margin-bottom: 40px;
+  }
+  h1 .accent { color: var(--red); }
+  .hero-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(242,242,242,0.6);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+  .hero-sub strong { color: var(--white); font-weight: 500; }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--red);
+    color: var(--white);
+    padding: 16px 36px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .hero-cta:hover::before { transform: translateX(0); }
+  .hero-cta:hover { box-shadow: 0 0 40px rgba(0,85,255,0.5); }
+
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    margin-top: 80px;
+    border-top: 1px solid var(--border);
+    padding-top: 40px;
+  }
+  .stat {
+    flex: 1;
+    padding: 0 40px 0 0;
+    border-right: 1px solid var(--border);
+    margin-right: 40px;
+  }
+  .stat:last-child { border-right: none; margin-right: 0; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: var(--red);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--grey);
+    letter-spacing: 1px;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* GENERAL SECTION STYLES */
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 48px;
+    height: 1px;
+    background: var(--red);
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 6vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+  }
+  h2 .dim { color: var(--muted); }
+  .section-body {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: rgba(242,242,242,0.7);
+    max-width: 680px;
+  }
+  .section-body strong { color: var(--white); font-weight: 500; }
+
+  /* PAIN SECTION */
+  #pain { background: var(--deep); }
+  .pain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 64px;
+  }
+  .pain-card {
+    background: var(--surface);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .pain-card:hover { background: #1c1c1c; }
+  .pain-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--red);
+    transition: width 0.4s ease;
+    box-shadow: 0 0 8px var(--red-glow);
+  }
+  .pain-card:hover::before { width: 100%; }
+  .pain-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(0,85,255,0.1);
+    line-height: 1;
+    margin-bottom: -20px;
+  }
+  .pain-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: var(--white);
+  }
+  .pain-text {
+    font-size: 14px;
+    color: var(--grey);
+    line-height: 1.7;
+  }
+
+  /* PROMISE SECTION */
+  #promise {
+    background: var(--red);
+    position: relative;
+    overflow: hidden;
+  }
+  #promise h2 { color: var(--white); }
+  #promise::before {
+    content: 'REBORN AI';
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 280px;
+    color: rgba(0,0,0,0.12);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -4px;
+  }
+  .promise-items {
+    display: flex;
+    gap: 0;
+    margin-top: 64px;
+  }
+  .promise-item {
+    flex: 1;
+    padding: 32px 40px 32px 0;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    margin-right: 40px;
+  }
+  .promise-item:last-child { border-right: none; margin-right: 0; }
+  .promise-verb {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--white);
+    display: block;
+    line-height: 1;
+  }
+  .promise-detail {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  /* MODULES SECTION */
+  #modules { background: var(--black); }
+  .modules-intro {
+    margin-bottom: 80px;
+  }
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  .module-card {
+    background: var(--surface);
+    padding: 36px 32px;
+    position: relative;
+    cursor: default;
+    transition: background 0.3s;
+    overflow: hidden;
+  }
+  .module-card:hover { background: #181818; }
+  .module-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--red);
+    transition: height 0.4s ease;
+    box-shadow: 0 0 12px var(--red-glow);
+  }
+  .module-card:hover::after { height: 100%; }
+  .module-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .module-subtitle {
+    font-size: 11px;
+    color: var(--grey);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-family: 'Space Mono', monospace;
+  }
+  .module-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .module-features li {
+    font-size: 13px;
+    color: rgba(242,242,242,0.5);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+    transition: color 0.2s;
+  }
+  .module-card:hover .module-features li { color: rgba(242,242,242,0.75); }
+  .module-features li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-size: 11px;
+  }
+
+  /* MODULE DEEP DIVE */
+  .module-section {
+    background: var(--deep);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 48px;
+    min-height: auto;
+  }
+  .module-section:nth-child(even) { background: var(--black); }
+  .module-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 64px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .module-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--red);
+    background: rgba(0,85,255,0.08);
+    border: 1px solid rgba(0,85,255,0.2);
+    padding: 6px 14px;
+    align-self: center;
+  }
+  .module-big-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 8vw, 110px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+  }
+  .module-desc {
+    font-size: 16px;
+    color: var(--grey);
+    max-width: 360px;
+    line-height: 1.7;
+    align-self: flex-end;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  .feature-card {
+    background: var(--surface);
+    padding: 40px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card:hover { background: #1a1a1a; }
+  .feature-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .feature-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    line-height: 1.05;
+  }
+  .feature-what {
+    font-size: 12px;
+    color: rgba(242,242,242,0.4);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .feature-why {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-bottom: 16px;
+  }
+  .feature-why-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--grey);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .feature-why-text {
+    font-size: 14px;
+    color: rgba(242,242,242,0.95);
+    line-height: 1.6;
+    font-weight: 600;
+  }
+  .feature-example {
+    background: rgba(0,85,255,0.06);
+    border-left: 2px solid var(--red);
+    padding: 14px 16px;
+    margin-top: 16px;
+  }
+  .feature-example-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--red);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .feature-example-text {
+    font-size: 13px;
+    color: rgba(242,242,242,0.8);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  /* BEFORE/AFTER */
+  #before-after {
+    background: var(--black);
+  }
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-top: 64px;
+  }
+  .ba-col {
+    padding: 56px 48px;
+  }
+  .ba-col-before { background: var(--surface); }
+  .ba-col-after { background: var(--red); }
+  .ba-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    margin-bottom: 40px;
+    display: block;
+    opacity: 0.7;
+  }
+  .ba-col-before .ba-label { color: var(--grey); }
+  .ba-col-after .ba-label { color: rgba(255,255,255,0.7); }
+  .ba-items { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .ba-items li {
+    font-size: 16px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.5;
+  }
+  .ba-col-before .ba-items li { color: rgba(242,242,242,0.5); }
+  .ba-col-after .ba-items li { color: rgba(255,255,255,0.9); }
+  .ba-icon {
+    width: 20px; height: 20px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+  }
+  .ba-col-before .ba-icon { background: var(--muted); color: var(--grey); }
+  .ba-col-after .ba-icon { background: rgba(255,255,255,0.2); color: var(--white); }
+
+  /* 30 DAYS */
+  #thirty { background: var(--deep); }
+  .thirty-items {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 64px;
+  }
+  .thirty-item {
+    background: var(--surface);
+    padding: 40px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .thirty-item:hover { background: #1c1c1c; }
+  .thirty-day-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: rgba(0,85,255,0.15);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .thirty-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .thirty-text {
+    font-size: 12px;
+    color: var(--grey);
+    line-height: 1.65;
+  }
+
+  /* WHY US */
+  #why {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 64px;
+    align-items: center;
+  }
+  .why-items { display: flex; flex-direction: column; gap: 0; }
+  .why-item {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    transition: all 0.3s;
+  }
+  .why-item:first-child { border-top: 1px solid var(--border); }
+  .why-item:hover .why-item-num { color: var(--red); }
+  .why-item-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--muted);
+    line-height: 1;
+    transition: color 0.3s;
+    min-width: 56px;
+  }
+  .why-item-content {}
+  .why-item-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .why-item-text {
+    font-size: 14px;
+    color: var(--grey);
+    line-height: 1.7;
+  }
+  .why-visual {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .why-visual::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(0,85,255,0.15), transparent 70%);
+    border-radius: 50%;
+  }
+  .magnopus-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--grey);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    display: inline-block;
+    margin-bottom: 32px;
+  }
+  .magnopus-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .magnopus-title span { color: var(--red); }
+  .magnopus-text {
+    font-size: 15px;
+    color: var(--grey);
+    line-height: 1.8;
+  }
+
+  /* CTA FINAL */
+  #cta {
+    background: var(--red);
+    text-align: center;
+    align-items: center;
+    min-height: 80vh;
+    position: relative;
+    overflow: hidden;
+  }
+  #cta::before {
+    content: '2026';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 600px;
+    color: rgba(0,0,0,0.08);
+    line-height: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    letter-spacing: -10px;
+  }
+  #cta h2 {
+    font-size: clamp(64px, 9vw, 128px);
+    position: relative;
+    z-index: 2;
+  }
+  #cta .section-body {
+    color: rgba(255,255,255,0.75);
+    position: relative;
+    z-index: 2;
+    max-width: 560px;
+    text-align: center;
+    margin: 0 auto 48px;
+  }
+  .cta-btns {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .btn-primary {
+    background: var(--white);
+    color: var(--red);
+    padding: 18px 48px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    background: var(--black);
+    color: var(--white);
+    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+  }
+  .btn-secondary {
+    border: 1px solid rgba(255,255,255,0.4);
+    color: var(--white);
+    padding: 18px 48px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--red); }
+  .footer-powered {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--grey);
+  }
+
+  /* ANIMATE IN */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* LIVE INDICATOR */
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,85,255,0.1);
+    border: 1px solid rgba(0,85,255,0.3);
+    padding: 6px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--red);
+    margin-bottom: 48px;
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: blink 1.2s step-end infinite;
+    box-shadow: 0 0 6px var(--red-glow);
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @media (max-width: 900px) {
+    section { padding: 100px 24px 60px; }
+    nav { padding: 16px 24px; }
+    .modules-grid { grid-template-columns: repeat(2, 1fr); }
+    .features-grid { grid-template-columns: 1fr; }
+    .pain-grid { grid-template-columns: 1fr; }
+    .ba-grid { grid-template-columns: 1fr; }
+    .thirty-items { grid-template-columns: repeat(2, 1fr); }
+    .why-grid { grid-template-columns: 1fr; }
+    .promise-items { flex-direction: column; }
+    .hero-stats { flex-direction: column; gap: 24px; }
+    .stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 0; }
+  }
+
+  /* ═══ GUERRILHA AI ══════════════════════════════════ */
+  #guerrilha { background: var(--black); padding: 0; min-height: auto; border-bottom: none; overflow: hidden; }
+  .guerrilha-hero { background: var(--black); padding: 100px 48px 60px; position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .guerrilha-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,85,255,0.10) 0%, transparent 70%); pointer-events: none; }
+  .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(0,85,255,0.12); transform: translate(-50%, -50%); animation: ring-pulse 3s ease-out infinite; top: 50%; left: 50%; }
+  .ring:nth-child(1){width:300px;height:300px;animation-delay:0s}.ring:nth-child(2){width:550px;height:550px;animation-delay:.7s}.ring:nth-child(3){width:800px;height:800px;animation-delay:1.4s}.ring:nth-child(4){width:1050px;height:1050px;animation-delay:2.1s}
+  @keyframes ring-pulse{0%{opacity:.7;transform:translate(-50%,-50%) scale(.7)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.1)}}
+  .meme-particles{position:absolute;top:0;right:0;width:45%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+  .meme-particle{position:absolute;font-family:'Bebas Neue',sans-serif;color:rgba(0,85,255,.09);animation:float-meme linear infinite;white-space:nowrap}
+  @keyframes float-meme{from{transform:translateY(120%) rotate(-12deg);opacity:0}10%{opacity:1}90%{opacity:1}to{transform:translateY(-120%) rotate(-12deg);opacity:0}}
+  .guerrilha-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(0,85,255,.1);border:1px solid rgba(0,85,255,.3);padding:6px 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:32px;position:relative;z-index:2}
+  .guerrilha-tag-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:blink .8s step-end infinite;box-shadow:0 0 8px var(--red-glow)}
+  .guerrilha-title{position:relative;z-index:2}
+  .guerrilha-title h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,9vw,116px);line-height:.9;letter-spacing:2px;margin-bottom:24px}
+  .guerrilha-title h2 .blast{color:var(--red)}
+  .guerrilha-title h2 .outline{-webkit-text-stroke:1px rgba(242,242,242,.25);color:transparent}
+  .guerrilha-subtitle{font-size:18px;font-weight:300;color:rgba(242,242,242,.6);max-width:620px;line-height:1.7}
+  .guerrilha-subtitle strong{color:var(--white);font-weight:600}
+
+  /* TRENDS */
+  .trends-section{padding:80px 48px;background:var(--deep);border-top:1px solid var(--border)}
+  .trends-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .trends-label::after{content:'';flex:1;max-width:48px;height:1px;background:var(--red)}
+  .trends-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px}
+  .trends-header h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,72px);line-height:.95;letter-spacing:1px}
+  .trends-header h2 .dim{color:var(--muted)}
+  .trends-live{display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:10px;color:var(--grey);letter-spacing:2px}
+  .trends-live-dot{width:8px;height:8px;background:#00ff88;border-radius:50%;box-shadow:0 0 8px #00ff88;animation:blink 1s step-end infinite}
+  .trends-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+  .trend-card{background:var(--surface);position:relative;overflow:hidden;transition:background .3s}
+  .trend-card:hover{background:#1c1c1c}
+
+  /* IMAGE SLOTS */
+  .trend-visual{height:220px;position:relative;overflow:hidden}
+  .trend-img-wrap{width:100%;height:100%;position:relative;background:#0a0a0a}
+  .trend-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+  .trend-card:hover .trend-img{transform:scale(1.04)}
+  .trend-img-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);border:2px dashed var(--border)}
+  .trend-img-wrap:not(.img-missing) .trend-img-placeholder{display:none}
+  .tip-icon{font-size:40px;filter:grayscale(1);opacity:.5}
+  .tip-name{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--grey);letter-spacing:2px}
+  .tip-file{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);background:var(--black);padding:4px 10px;border:1px solid var(--border)}
+
+  .trend-badge{position:absolute;top:12px;left:12px;background:var(--red);color:var(--white);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 8px;z-index:10}
+  .trend-rank{position:absolute;bottom:10px;left:12px;font-family:'Bebas Neue',sans-serif;font-size:44px;color:rgba(255,255,255,.1);line-height:1;z-index:10}
+  .trend-content{padding:24px 24px 0}
+  .trend-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--white);margin-bottom:6px;line-height:1}
+  .trend-desc{font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:18px}
+
+  /* PROMPT */
+  .prompt-box{background:var(--black);border:1px solid rgba(0,85,255,.2);border-left:3px solid var(--red);padding:14px;margin-bottom:12px}
+  .prompt-box-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--red);text-transform:uppercase;margin-bottom:8px}
+  .prompt-text{font-family:'Space Mono',monospace;font-size:9px;color:rgba(242,242,242,.7);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+  .prompt-text .var{color:var(--red);font-weight:700}
+  .copy-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(0,85,255,.1);border:1px solid rgba(0,85,255,.3);color:var(--red);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;padding:8px 16px;cursor:pointer;text-transform:uppercase;transition:all .2s;margin-bottom:24px;width:100%;justify-content:center}
+  .copy-btn:hover{background:var(--red);color:var(--white);border-color:var(--red)}
+  .copy-btn.copied{background:#00ff88;color:#000;border-color:#00ff88}
+  .copy-icon{font-size:12px}
+
+  /* CANDIDATO AI */
+  .candidato-section{padding:80px 48px;background:var(--black);border-top:1px solid var(--border);position:relative;overflow:hidden}
+  .candidato-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 100% 50%,rgba(0,85,255,.06),transparent);pointer-events:none}
+  .candidato-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:2}
+  .candidato-visual{position:relative;height:400px;display:flex;align-items:center;justify-content:center}
+  .ai-orb{position:absolute;border-radius:50%;animation:rotate-orb 5s linear infinite}
+  @keyframes rotate-orb{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .ai-orb::before{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--black)}
+  .ai-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:2}
+  .ai-face{font-size:68px;display:block;margin-bottom:8px;filter:drop-shadow(0 0 24px rgba(0,85,255,.9))}
+  .ai-face-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--red)}
+  .candidato-orbit{position:absolute;border-radius:50%;border:1px dashed rgba(0,85,255,.2);top:50%;left:50%;transform:translate(-50%,-50%)}
+  .candidato-orbit-dot{position:absolute;width:8px;height:8px;background:var(--red);border-radius:50%;box-shadow:0 0 8px var(--red-glow);top:-4px;left:50%;transform:translateX(-50%)}
+  .orbit-1{width:180px;height:180px;animation:orbit-spin 5s linear infinite}
+  .orbit-2{width:270px;height:270px;animation:orbit-spin 9s linear infinite reverse}
+  .orbit-3{width:360px;height:360px;animation:orbit-spin 14s linear infinite}
+  @keyframes orbit-spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+  .candidato-content h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,68px);line-height:.95;letter-spacing:1px;margin-bottom:20px}
+  .candidato-content p{font-size:15px;color:rgba(242,242,242,.65);line-height:1.75;margin-bottom:28px}
+  .candidato-content p strong{color:var(--white);font-weight:600}
+  .candidato-features{display:flex;flex-direction:column;gap:0;margin-bottom:36px}
+  .candidato-feature{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+  .candidato-feature:first-child{border-top:1px solid var(--border)}
+  .cf-icon{width:34px;height:34px;background:rgba(0,85,255,.1);border:1px solid rgba(0,85,255,.2);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .cf-text{font-size:13px;color:rgba(242,242,242,.75);line-height:1.5}
+  .cf-text strong{color:var(--white);font-weight:600;display:block;margin-bottom:1px}
+
+  /* STEPS */
+  .guerrilha-steps{padding:60px 48px 80px;background:var(--deep);border-top:1px solid var(--border)}
+  .steps-row{display:flex;align-items:stretch;margin-top:48px}
+  .step-item{flex:1;padding:28px;border-right:1px solid var(--border);position:relative}
+  .step-item:last-child{border-right:none}
+  .step-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(0,85,255,.1);line-height:1;margin-bottom:-12px}
+  .step-icon{font-size:26px;margin-bottom:12px;display:block}
+  .step-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--white);margin-bottom:8px}
+  .step-text{font-size:12px;color:var(--grey);line-height:1.7}
+  .step-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;z-index:2}
+  .step-item:last-child .step-arrow{display:none}
+
+  @media(max-width:900px){
+    .trends-grid{grid-template-columns:1fr}
+    .candidato-grid{grid-template-columns:1fr}
+    .candidato-visual{height:260px}
+    .steps-row{flex-direction:column}
+    .step-item{border-right:none;border-bottom:1px solid var(--border)}
+    .step-arrow{display:none}
+    .guerrilha-hero,.trends-section,.candidato-section,.guerrilha-steps{padding-left:24px;padding-right:24px}
+  }
+
+
+  /* ═══ IMAGE PLACEHOLDERS ═══════════════════════════════════ */
+  .img-slot {
+    position: relative;
+    overflow: hidden;
+    background: #0a0a0a;
+  }
+  .img-slot img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .img-slot:hover img { transform: scale(1.03); }
+  .img-slot .ph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 2px dashed #1e2a3a;
+    background: linear-gradient(135deg, #070b10 0%, #0a0f18 100%);
+    padding: 20px;
+    text-align: center;
+  }
+  /* Hide placeholder when image loads */
+  .img-slot img:not([src=""]):not([src]) + .ph,
+  .img-slot img.loaded + .ph { display: none; }
+  .ph-icon { font-size: 32px; opacity: 0.5; }
+  .ph-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #2a4a6a;
+  }
+  .ph-file {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #0055FF;
+    background: rgba(0,85,255,0.08);
+    border: 1px solid rgba(0,85,255,0.2);
+    padding: 4px 10px;
+    letter-spacing: 1px;
+  }
+  .ph-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    color: #2a3a4a;
+    max-width: 200px;
+    line-height: 1.5;
+  }
+  .ph-size {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: #1a2a3a;
+    letter-spacing: 1px;
+  }
+
+  /* HERO BG IMAGE */
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-bg-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0.18;
+    filter: saturate(0.3) brightness(0.5);
+  }
+  .hero-bg-img .ph {
+    border: none;
+    background: transparent;
+  }
+  .hero-bg-img .ph-title { color: #1a3a5a; font-size: 11px; }
+
+  /* PAIN IMAGE */
+  .pain-img-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 40px;
+  }
+  .pain-img-slot {
+    height: 160px;
+  }
+
+  /* MODULES BG */
+  .modules-bg-img {
+    position: absolute;
+    right: 0; top: 0;
+    width: 35%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .modules-bg-img img { width:100%;height:100%;object-fit:cover;opacity:0.08; }
+  .modules-bg-img .ph { border: none; background: transparent; }
+  .modules-bg-img .ph-title { color: #1a2a3a; font-size: 10px; }
+
+  /* WHY IMAGE */
+  .why-img-slot {
+    width: 100%; height: 380px;
+    border: 1px solid var(--border);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="progress-bar" id="progress-bar"></div>
+
+<nav>
+  <div class="nav-logo">REBORN <span>AI</span></div>
+  <div class="nav-badge">POWERED BY REBORN AI STANDARD</div>
+</nav>
+
+<!-- HERO -->
+
+<section id="hero">
+  <div class="hero-bg-img img-slot">
+    <img src="img/hero-bg.jpg" alt="War room monitoramento AI"
+      onload="this.classList.add('loaded')"
+      onerror="this.style.display='none'">
+    <div class="ph">
+      <div class="ph-icon">🖥️</div>
+      <div class="ph-title">IMAGEM DE FUNDO — HERO</div>
+      <div class="ph-file">img/hero-bg.jpg</div>
+      <div class="ph-desc">War room, telas com dados, monitoramento em tempo real, tech dark</div>
+      <div class="ph-size">IDEAL: 1920×1080px — JPG</div>
+    </div>
+  </div>
+  <div class="hero-grid"></div>
+  <div class="hero-scan"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Plataforma de Marketing Político • 2026</div>
+    <h1>A GUERRA<br>É DE <span class="accent">NARRATIVA</span>.<br>VENHA ARMADO.</h1>
+    <p class="hero-sub">Monitoramento com AI, previsibilidade de crise e produção em escala. Enquanto seus adversários <strong>reagem</strong>, você <strong>dita</strong> a conversa.</p>
+    <a href="#promise" class="hero-cta">Ver a plataforma ↓</a>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">8</span>
+        <span class="stat-label">Módulos integrados</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">+40×</span>
+        <span class="stat-label">Mais peças produzidas</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2h</span>
+        <span class="stat-label">Antecipação de crise</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Personalização por região</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pain">
+  <div class="section-label">O problema</div>
+  <h2>A REALIDADE<br><span class="dim">QUE VOCÊ VIVE HOJE</span></h2>
+  <div class="pain-grid reveal">
+    <div class="pain-card">
+      <div class="pain-num">01</div>
+      <div class="pain-title">Você reage tarde</div>
+      <p class="pain-text">Crise nasce pequena e vira manchete em horas. Quando você vê, o estrago já está feito. O adversário dita a conversa enquanto você apaga incêndio.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-num">02</div>
+      <div class="pain-title">Você fala genérico</div>
+      <p class="pain-text">Brasil não é um lugar só. O que pega na capital não existe no interior. Mensagem sem território é dinheiro jogado fora — e voto que nunca vem.</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-num">03</div>
+      <div class="pain-title">Você não escala</div>
+      <p class="pain-text">O candidato não grava tudo. A equipe não produz o suficiente. Enquanto isso, o adversário aparece todos os dias, em todos os lugares, com mensagem afinada.</p>
+    </div>
+  </div>
+  <div class="pain-img-row">
+    <div class="pain-img-slot img-slot">
+      <img src="img/pain-01.jpg" alt="Crise viral redes sociais"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">📱</div>
+        <div class="ph-title">DOR 01 — CRISE VIRAL</div>
+        <div class="ph-file">img/pain-01.jpg</div>
+        <div class="ph-desc">Print de post viral, trending, comentários explosivos</div>
+        <div class="ph-size">800×400px — JPG</div>
+      </div>
+    </div>
+    <div class="pain-img-slot img-slot">
+      <img src="img/pain-02.jpg" alt="Mensagem genérica sem alcance"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">📢</div>
+        <div class="ph-title">DOR 02 — MENSAGEM GENÉRICA</div>
+        <div class="ph-file">img/pain-02.jpg</div>
+        <div class="ph-desc">Outdoor vazio, palanque sem público, comício fraco</div>
+        <div class="ph-size">800×400px — JPG</div>
+      </div>
+    </div>
+    <div class="pain-img-slot img-slot">
+      <img src="img/pain-03.jpg" alt="Candidato sem escala de produção"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">⏱️</div>
+        <div class="ph-title">DOR 03 — SEM ESCALA</div>
+        <div class="ph-file">img/pain-03.jpg</div>
+        <div class="ph-desc">Equipe pequena sobrecarregada, mesa de trabalho, notebook</div>
+        <div class="ph-size">800×400px — JPG</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section id="promise">
+  <div class="section-label" style="color: rgba(255,255,255,0.6);">A promessa</div>
+  <h2>REBORN AI<br>TRANSFORMA<br>CAOS EM CONTROLE</h2>
+  <div class="promise-items reveal">
+    <div class="promise-item">
+      <span class="promise-verb">VEJA</span>
+      <p class="promise-detail">O que o eleitor está sentindo agora, por região, antes de qualquer pesquisa ou manchete.</p>
+    </div>
+    <div class="promise-item">
+      <span class="promise-verb">PREVEJA</span>
+      <p class="promise-detail">Crise antes de virar crise. Com tempo para agir com calma e controle de narrativa.</p>
+    </div>
+    <div class="promise-item">
+      <span class="promise-verb">PLANEJE</span>
+      <p class="promise-detail">Estratégia com dados reais, não intuição. Baseada em padrões de campanhas que já venceram.</p>
+    </div>
+    <div class="promise-item">
+      <span class="promise-verb">PRODUZA</span>
+      <p class="promise-detail">Dezenas de peças por semana, personalizadas por região, grupo e canal. Sem parar, sem perder padrão.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GUERRILHA AI ══════════════════════════════════════════════════ -->
+<section id="guerrilha">
+
+  <!-- HERO BOMB -->
+  <div class="guerrilha-hero">
+    <div style="position:absolute;top:40%;left:65%;pointer-events:none;z-index:0">
+      <div class="ring"></div><div class="ring"></div>
+      <div class="ring"></div><div class="ring"></div>
+    </div>
+    <div class="meme-particles">
+      <span class="meme-particle" style="font-size:80px;left:10%;animation-duration:9s;animation-delay:0s">VIRAL</span>
+      <span class="meme-particle" style="font-size:50px;left:50%;animation-duration:7s;animation-delay:2s">TREND</span>
+      <span class="meme-particle" style="font-size:100px;left:25%;animation-duration:11s;animation-delay:1s">MEME</span>
+      <span class="meme-particle" style="font-size:60px;left:70%;animation-duration:8s;animation-delay:3s">IA</span>
+      <span class="meme-particle" style="font-size:40px;left:5%;animation-duration:10s;animation-delay:4s">2026</span>
+      <span class="meme-particle" style="font-size:70px;left:40%;animation-duration:6s;animation-delay:5s">GPT</span>
+    </div>
+    <div class="guerrilha-title">
+      <div class="guerrilha-tag">
+        <div class="guerrilha-tag-dot"></div>
+        MÓDULO GUERRILHA AI
+      </div>
+      <h2>EXPLOSÃO<br>DE <span class="blast">MEMES</span><br><span class="outline">VIRAIS</span></h2>
+      <p class="guerrilha-subtitle">
+        Transforme qualquer trend em <strong>munição política</strong>.<br>
+        Seu apoiador cola o prompt, gera o conteúdo e dispara.<br>
+        A campanha escala <strong>sem depender de equipe</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- TOP 3 TRENDS -->
+  <div class="trends-section">
+    <div class="trends-label">Prompts prontos</div>
+    <div class="trends-header">
+      <h2>TOP 3 TRENDS<br><span class="dim">DE IA AGORA</span></h2>
+      <div class="trends-live"><div class="trends-live-dot"></div>ATUALIZADO EM TEMPO REAL</div>
+    </div>
+
+    <div class="trends-grid">
+
+      <!-- TREND 1: GHIBLI -->
+      <div class="trend-card">
+        <div class="trend-visual">
+          <div class="trend-img-wrap">
+            <img src="img/trend-ghibli.jpg" alt="Trend Ghibli AI" class="trend-img"
+              onerror="this.parentNode.classList.add('img-missing'); this.style.display='none'">
+            <div class="trend-img-placeholder">
+              <div class="tip-icon">🏯</div>
+              <div class="tip-name">MODO GHIBLI</div>
+              <div class="tip-file">img/trend-ghibli.jpg</div>
+            </div>
+          </div>
+          <div class="trend-badge">🔥 TREND #1</div>
+          <div class="trend-rank">01</div>
+        </div>
+        <div class="trend-content">
+          <div class="trend-name">MODO GHIBLI</div>
+          <div class="trend-desc">Candidato no universo Ghibli — aquarela, mágico, emocional. O trend que dominou o mundo.</div>
+          <div class="prompt-box">
+            <div class="prompt-box-label"><span>📋 PROMPT — ChatGPT / Midjourney / Gemini</span></div>
+            <div class="prompt-text" id="prompt-ghibli">Create a Studio Ghibli animated-style illustration of a Brazilian politician named <span class="var">[NOME DO CANDIDATO]</span>. Standing in a magical whimsical landscape with soft watercolor tones, gentle wind, glowing warm light. Warm trustworthy expression, wearing <span class="var">[ROUPA]</span>. Background: rolling hills, small town, hopeful sky. Style: Hayao Miyazaki, soft pastel palette, cinematic. Caption: <span class="var">"[SLOGAN DA CAMPANHA]"</span></div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt('prompt-ghibli', this)"><span class="copy-icon">⎘</span> COPIAR PROMPT</button>
+        </div>
+      </div>
+
+      <!-- TREND 2: BRIDGERTON -->
+      <div class="trend-card">
+        <div class="trend-visual">
+          <div class="trend-img-wrap">
+            <img src="img/trend-bridgerton.jpg" alt="Trend Bridgerton AI" class="trend-img"
+              onerror="this.parentNode.classList.add('img-missing'); this.style.display='none'">
+            <div class="trend-img-placeholder">
+              <div class="tip-icon">👑</div>
+              <div class="tip-name">MODO BRIDGERTON</div>
+              <div class="tip-file">img/trend-bridgerton.jpg</div>
+            </div>
+          </div>
+          <div class="trend-badge">🔥 TREND #2</div>
+          <div class="trend-rank">02</div>
+        </div>
+        <div class="trend-content">
+          <div class="trend-name">MODO BRIDGERTON</div>
+          <div class="trend-desc">Candidato em pintura de época. Luxo, autoridade, presença de líder. Viral no Brasil e no mundo.</div>
+          <div class="prompt-box">
+            <div class="prompt-box-label"><span>📋 PROMPT — ChatGPT / Midjourney / Gemini</span></div>
+            <div class="prompt-text" id="prompt-bridgerton">Create a Bridgerton-style oil painting portrait of a Brazilian politician named <span class="var">[NOME DO CANDIDATO]</span>. Regency era aesthetic, ornate golden frame, candlelit ballroom background, deep blue and gold tones. Noble dignified posture, elegant period attire. Rich textures, dramatic lighting. Ribbon with: <span class="var">"[SLOGAN DA CAMPANHA]"</span>. Style: classical portrait, cinematic, 8k.</div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt('prompt-bridgerton', this)"><span class="copy-icon">⎘</span> COPIAR PROMPT</button>
+        </div>
+      </div>
+
+      <!-- TREND 3: CYBER IA -->
+      <div class="trend-card">
+        <div class="trend-visual">
+          <div class="trend-img-wrap">
+            <img src="img/trend-cyber.jpg" alt="Trend Cyber AI" class="trend-img"
+              onerror="this.parentNode.classList.add('img-missing'); this.style.display='none'">
+            <div class="trend-img-placeholder">
+              <div class="tip-icon">🤖</div>
+              <div class="tip-name">MODO CYBER IA</div>
+              <div class="tip-file">img/trend-cyber.jpg</div>
+            </div>
+          </div>
+          <div class="trend-badge">🔥 TREND #3</div>
+          <div class="trend-rank">03</div>
+        </div>
+        <div class="trend-content">
+          <div class="trend-name">MODO CYBER IA</div>
+          <div class="trend-desc">Candidato como líder futurista. Tech, visão, candidato da inovação. Conecta com jovens.</div>
+          <div class="prompt-box">
+            <div class="prompt-box-label"><span>📋 PROMPT — ChatGPT / Midjourney / Gemini</span></div>
+            <div class="prompt-text" id="prompt-cyber">Create a cyberpunk-style portrait of Brazilian politician <span class="var">[NOME DO CANDIDATO]</span> as a visionary tech leader. Holographic elements, neon blue and electric cyan glow, dark background with circuit patterns. HUD overlay showing data and name <span class="var">[NOME]</span>. Background: future Brazil city skyline at night. Text: <span class="var">"[SLOGAN]"</span>. Style: Blade Runner, cinematic sci-fi, ultra-detailed, 8k.</div>
+          </div>
+          <button class="copy-btn" onclick="copyPrompt('prompt-cyber', this)"><span class="copy-icon">⎘</span> COPIAR PROMPT</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CANDIDATO AI -->
+  <div class="candidato-section">
+    <div class="candidato-grid">
+      <div class="candidato-visual">
+        <div class="candidato-orbit orbit-1"><div class="candidato-orbit-dot"></div></div>
+        <div class="candidato-orbit orbit-2"><div class="candidato-orbit-dot"></div></div>
+        <div class="candidato-orbit orbit-3"><div class="candidato-orbit-dot"></div></div>
+        <div class="ai-orb" style="width:140px;height:140px;background:conic-gradient(from 0deg,#0055FF,#001a99,#0055FF)">
+          <div style="position:absolute;inset:4px;border-radius:50%;background:var(--black)"></div>
+        </div>
+        <div class="ai-inner">
+          <span class="ai-face">🧬</span>
+          <span class="ai-face-label">CANDIDATO.AI</span>
+        </div>
+      </div>
+      <div class="candidato-content">
+        <div class="section-label">Replicar o Candidato</div>
+        <h2>SEU CANDIDATO<br>EM QUALQUER<br>TREND</h2>
+        <p>O apoiador entra no ChatGPT, Midjourney ou qualquer IA, <strong>cola o prompt</strong>, preenche o nome e o slogan. Em segundos gera conteúdo que parece produção profissional.</p>
+        <div class="candidato-features">
+          <div class="candidato-feature"><div class="cf-icon">⚡</div><div class="cf-text"><strong>Geração em segundos</strong>Qualquer apoiador produz — sem designer, sem agência</div></div>
+          <div class="candidato-feature"><div class="cf-icon">📡</div><div class="cf-text"><strong>Escala viral orgânica</strong>Cada apoiador vira um núcleo de distribuição autônomo</div></div>
+          <div class="candidato-feature"><div class="cf-icon">🎯</div><div class="cf-text"><strong>Sempre no trend</strong>Plataforma atualiza prompts conforme o que está bombando</div></div>
+          <div class="candidato-feature"><div class="cf-icon">🛡️</div><div class="cf-text"><strong>Mensagem controlada</strong>Prompt garante slogan e tom certo em todo conteúdo gerado</div></div>
+        </div>
+        <a href="#" class="hero-cta" style="display:inline-flex">Acessar banco de prompts →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="guerrilha-steps">
+    <div class="section-label">Como funciona</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,68px);line-height:.95">GUERRILHA<br><span style="color:var(--muted)">EM 4 PASSOS</span></h2>
+    <div class="steps-row">
+      <div class="step-item">
+        <div class="step-num">01</div>
+        <span class="step-icon">📱</span>
+        <div class="step-title">IDENTIFICA O TREND</div>
+        <p class="step-text">RADAR detecta o que está viralizando. Plataforma já tem o prompt pronto para aquele formato.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">02</div>
+        <span class="step-icon">📋</span>
+        <div class="step-title">APOIADOR COPIA</div>
+        <p class="step-text">Um clique. Prompt vai para o clipboard. Cola no ChatGPT, Midjourney ou Kling AI.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">03</div>
+        <span class="step-icon">🎨</span>
+        <div class="step-title">IA GERA O CONTEÚDO</div>
+        <p class="step-text">Imagem com o candidato no trend. Com slogan, identidade e qualidade de produção.</p>
+        <div class="step-arrow">→</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">04</div>
+        <span class="step-icon">💥</span>
+        <div class="step-title">DISPARA E VIRALIZA</div>
+        <p class="step-text">Apoiador posta. A rede amplifica. Candidato aparece onde o eleitor já está.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- ═══ FIM GUERRILHA ══════════════════════════════════════════════════════ -->
+
+<!-- MODULES OVERVIEW -->
+<section id="modules" style="position:relative">
+  <div class="modules-bg-img img-slot">
+    <img src="img/modules-bg.jpg" alt="Plataforma Reborn AI interface"
+      onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+    <div class="ph">
+      <div class="ph-icon">💻</div>
+      <div class="ph-title">FUNDO — 8 MÓDULOS</div>
+      <div class="ph-file">img/modules-bg.jpg</div>
+      <div class="ph-desc">Dashboard tech, interface dark, dados em tela</div>
+      <div class="ph-size">800×900px — JPG</div>
+    </div>
+  </div>
+  <div class="modules-intro" style="position:relative;z-index:2">
+    <div class="section-label">A plataforma</div>
+    <h2>8 MÓDULOS.<br><span class="dim">UM SISTEMA.</span></h2>
+    <p class="section-body">Não é "ferramenta solta". É sistema integrado de campanha. Cada módulo alimenta o outro. É assim que vira vantagem injusta.</p>
+  </div>
+  <div class="modules-grid reveal">
+    <div class="module-card">
+      <div class="module-name">RADAR</div>
+      <div class="module-subtitle">Monitoramento AI</div>
+      <ul class="module-features">
+        <li>Redes sociais em tempo real</li>
+        <li>Trend topics com ângulo estratégico</li>
+        <li>Alerta ligado a previsibilidade de crise</li>
+      </ul>
+    </div>
+    <div class="module-card">
+      <div class="module-name">ESCUDO</div>
+      <div class="module-subtitle">Previsibilidade de Crise</div>
+      <ul class="module-features">
+        <li>Detecção de sinais iniciais</li>
+        <li>Alerta antecipado e priorização</li>
+        <li>Plano de reação orientado a dados</li>
+      </ul>
+    </div>
+    <div class="module-card">
+      <div class="module-name">MAPA</div>
+      <div class="module-subtitle">Geo-Inteligência AI</div>
+      <ul class="module-features">
+        <li>Geolocalização de conversas</li>
+        <li>Assuntos quentes por região</li>
+        <li>Desejos e medos locais</li>
+      </ul>
+    </div>
+    <div class="module-card">
+      <div class="module-name">PLANO</div>
+      <div class="module-subtitle">Planejamento AI</div>
+      <ul class="module-features">
+        <li>Estratégia com dados de cenário</li>
+        <li>Padrões de campanhas vitoriosas</li>
+        <li>Fases com objetivos claros</li>
+      </ul>
+    </div>
+    <div class="module-card">
+      <div class="module-name">LAB</div>
+      <div class="module-subtitle">Testes com Candidato AI</div>
+      <ul class="module-features">
+        <li>Peças com candidato AI para teste</li>
+        <li>Variações de discurso</li>
+        <li>Medição antes de investir em mídia</li>
+      </ul>
+    </div>
+    <div class="module-card">
+      <div class="module-name">FÁBRICA</div>
+      <div class="module-subtitle">Produção AI em Escala</div>
+      <ul class="module-features">
+        <li>Replicação de campanhas aprovadas</li>
+        <li>Agilidade, personalização, economia</li>
+        <li>Abrangência máxima de formatos</li>
+      </ul>
+    </div>
+    <div class="module-card">
+      <div class="module-name">VOZES</div>
+      <div class="module-subtitle">Discursos por Grupo</div>
+      <ul class="module-features">
+        <li>Personalização por perfil de eleitor</li>
+        <li>Mensagem por canal e formato</li>
+        <li>Coerência sem virar bagunça</li>
+      </ul>
+    </div>
+    <div class="module-card">
+      <div class="module-name">PRODUÇÃO</div>
+      <div class="module-subtitle">Ritmo AI Contínuo</div>
+      <ul class="module-features">
+        <li>Cadência diária com padrão</li>
+        <li>Rotina de entrega previsível</li>
+        <li>Peças organizadas por objetivo</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- MÓDULOS DETALHADOS -->
+<section id="modulos-detalhe" style="background:var(--black);padding:40px 48px 20px;border-top:1px solid var(--border);min-height:auto">
+  <div class="section-label">Detalhe técnico</div>
+  <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5vw,72px);line-height:.95;margin-bottom:48px">CADA MÓDULO<br><span style="color:var(--muted)">POR DENTRO</span></h2>
+</section>
+<!-- MODULE: RADAR -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">RADAR</h2>
+      <p class="module-desc">Monitoramento AI e Trend Topics</p>
+    </div>
+    <div class="module-tag">MÓDULO 01</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Monitoramento com AI de Redes Sociais</div>
+      <p class="feature-what">Acompanha conversas, comentários e conteúdos sobre candidato, temas e adversários em tempo real.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">A opinião do eleitor muda primeiro nas redes. Só depois aparece em pesquisa e imprensa.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Sobe um vídeo recortado do candidato com legenda maldosa. O Radar detecta aumento de menções negativas em 2h. O gabinete entra com resposta antes do vídeo virar pauta de jornal.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 — FEATURE</span>
+      <div class="feature-name">Estratégias em cima de Trend Topics</div>
+      <p class="feature-what">Identifica assuntos em alta e orienta o melhor ângulo para entrar no tema com precisão.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Falar "agenda do dia" quando o povo está falando outra coisa vira conteúdo invisível.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Tema nacional sobre custo de vida explode. Em vez de postar promessa genérica, a plataforma orienta uma entrada direta conectando o tema ao plano do candidato e ao problema local.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 — FEATURE</span>
+      <div class="feature-name">Monitoramento Ligado à Previsibilidade de Crise</div>
+      <p class="feature-what">Quando um assunto cresce com tom negativo, vira alerta de risco antes de escalar.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Crise não começa "grande". Ela começa como ruído e cresce sem você ver.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Grupo regional começa a espalhar boato sobre hospital ou escola. A plataforma sinaliza o assunto concentrado na região, antes de espalhar para o estado todo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE: ESCUDO -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">ESCUDO</h2>
+      <p class="module-desc">Previsibilidade de Crise</p>
+    </div>
+    <div class="module-tag">MÓDULO 02</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Previsibilidade de Crise</div>
+      <p class="feature-what">Detecta sinais iniciais de crise e mede o crescimento do assunto antes de explodir.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">A crise que te derruba geralmente é a que você viu tarde demais.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Sai denúncia indireta, sem prova, com alto potencial viral. A plataforma indica tendência de crescimento e o time responde cedo com postura firme e material de esclarecimento.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 — FEATURE</span>
+      <div class="feature-name">Alerta Antecipado e Priorização</div>
+      <p class="feature-what">Separa o que é barulho do que tem potencial de explodir. O gabinete não perde tempo.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Campanha morre por dispersão. Não dá pra correr atrás de tudo.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Aparecem 30 ataques em um dia. A plataforma marca 3 como críticos e 27 como barulho. O time não se perde e não compra briga errada.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 — FEATURE</span>
+      <div class="feature-name">Plano de Reação Orientado a Dados</div>
+      <p class="feature-what">Sugere o caminho de resposta por tipo de crise, alinhado ao cenário real.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Responder errado piora. Silenciar errado também piora. Dados eliminam esse risco.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Tema sensível explode. A plataforma indica se o melhor é resposta direta, nota curta, vídeo curto, aliado falando, ou mudança imediata de pauta.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE: MAPA -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">MAPA</h2>
+      <p class="module-desc">Geo-Inteligência AI</p>
+    </div>
+    <div class="module-tag">MÓDULO 03</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Geolocalização com AI</div>
+      <p class="feature-what">Organiza o que as pessoas estão falando por região, em tempo real.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">O Brasil é vários Brasis. O que pega em um lugar pode não existir no outro.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Na capital o tema dominante é transporte e segurança. No interior é saúde e emprego. A campanha adapta fala e peça para cada praça.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 — FEATURE</span>
+      <div class="feature-name">Assuntos Mais Quentes por Região</div>
+      <p class="feature-what">Mostra quais pautas dominam cada território para guiar agenda e presença.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Agenda do candidato tem que seguir calor real, não intuição do gabinete.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Uma cidade começa a falar forte sobre falta de médico. A plataforma aponta como assunto quente local e a campanha entra com posicionamento e visita, antes do adversário.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 — FEATURE</span>
+      <div class="feature-name">Desejos e Preocupações por Região</div>
+      <p class="feature-what">Identifica o que cada região quer e teme com mais força para criar mensagem real.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Voto vem de dor e desejo, não de lista de promessas.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Numa região a maior preocupação é violência em escola. Em outra, é fila de hospital. O discurso começa pela dor local e só depois apresenta a proposta.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE: PLANO -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">PLANO</h2>
+      <p class="module-desc">Planejamento AI com Dados de Vitórias</p>
+    </div>
+    <div class="module-tag">MÓDULO 04</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Planejamento AI das Estratégias</div>
+      <p class="feature-what">Transforma dados do cenário em estratégia, prioridades e sequência de mensagem.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Campanha sem sequência vira postagem aleatória. Não constrói percepção.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">A campanha define uma trilha: semanas de confiança, depois semanas de contraste, depois mobilização. Sem pular tema a cada trend.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 — FEATURE</span>
+      <div class="feature-name">Dados de Campanhas Vitoriosas</div>
+      <p class="feature-what">Usa padrões do que já venceu para orientar o que repetir e o que evitar.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Existe padrão de vitória — e existe erro que sempre se repete.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">A plataforma sugere cadência de temas e tipos de peça que historicamente aumentam recall e diminuem rejeição na pré-campanha.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 — FEATURE</span>
+      <div class="feature-name">Plano por Fase</div>
+      <p class="feature-what">Organiza a campanha em etapas com foco e objetivo claro em cada fase.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">2026 é decidida antes do período oficial. Pré-campanha é construção de vantagem.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Fase 1: aquecer e mapear base. Fase 2: dominar pauta regional. Fase 3: consolidar mensagem e preparar terreno para mídia.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE: LAB -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">LAB</h2>
+      <p class="module-desc">Testes com Candidato AI antes de Investir</p>
+    </div>
+    <div class="module-tag">MÓDULO 05</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Campanhas com Candidato AI</div>
+      <p class="feature-what">Cria versões de peças com candidato AI para testar mensagem e formato antes de produzir.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Produzir e veicular errado custa caro e gera rejeição.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">3 versões do mesmo tema com linguagem diferente. A plataforma mostra qual prende mais atenção e qual gera menos rejeição antes de qualquer real investido em mídia.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 — FEATURE</span>
+      <div class="feature-name">Testar Discursos</div>
+      <p class="feature-what">Gera variações de fala e argumento para comparar desempenho real com eleitor.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">O gabinete escolhe discurso pelo gosto interno, não pelo eleitor real.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">O candidato tem 2 formas de dizer a mesma proposta. Uma soa "política demais", outra soa "vida real". O teste aponta a melhor com dados, não opinião.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 — FEATURE</span>
+      <div class="feature-name">Medir Antes de Investir em Mídia</div>
+      <p class="feature-what">Mede reação, interesse e performance das versões testadas antes da veiculação paga.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Mídia amplifica tudo. Se a peça está errada, você amplifica o erro.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Antes de comprar mídia num vídeo, a campanha testa e verifica se o vídeo gera comentário positivo, compartilhamento e retenção real.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE: FÁBRICA -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">FÁBRICA</h2>
+      <p class="module-desc">Replicar Campanhas com Produção AI</p>
+    </div>
+    <div class="module-tag">MÓDULO 06</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Replicar Campanhas com Produção AI</div>
+      <p class="feature-what">Pega uma campanha aprovada e replica em versões coerentes para públicos e regiões.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Uma ideia boa morre se não virar volume e presença.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Uma campanha "custo de vida" vira 40 variações, cada uma para uma cidade e público específico, mantendo a mesma assinatura e coerência.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 + 03 — FEATURE</span>
+      <div class="feature-name">Agilidade + Personalização</div>
+      <p class="feature-what">Entrega mais peças em menos tempo, adaptadas por região e público mantendo o eixo central.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">O assunto de hoje morre amanhã. E eleitor odeia mensagem genérica.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Saiu um tema quente pela manhã. Até o fim do dia já existe peça regional e peça geral no ar, com exemplos diferentes para professor, mãe, motorista e comerciante.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">04 + 05 — FEATURE</span>
+      <div class="feature-name">Economia + Abrangência</div>
+      <p class="feature-what">Reduz custo por variação e amplia quantidade de formatos sem gravação constante.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Campanha tem teto de gasto. Vencer exige presença em vários canais.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Em vez de gravar 20 versões, grava-se menos e multiplica-se mais. A mesma linha vira Reels, Shorts, WhatsApp e peça de apoio para base sem refazer tudo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE: VOZES -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">VOZES</h2>
+      <p class="module-desc">Discursos Personalizados por Grupo</p>
+    </div>
+    <div class="module-tag">MÓDULO 07</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Discursos por Grupo de Eleitores</div>
+      <p class="feature-what">Cria versões do discurso para grupos diferentes com linguagem e foco adequados a cada perfil.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Grupos diferentes ouvem de forma diferente. Um tamanho só não serve para todos.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">O mesmo tema "emprego" vira versão jovem, versão empreendedor, versão periferia, versão servidor. Cada grupo sente que o candidato está falando diretamente com ele.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 — FEATURE</span>
+      <div class="feature-name">Personalização por Perfil</div>
+      <p class="feature-what">Muda o ponto de entrada e os exemplos mantendo a proposta central intacta.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">O que convence um grupo irrita outro se você fala errado.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Para um grupo o foco é segurança e ordem. Para outro é oportunidade e dignidade. A proposta é a mesma. A entrada muda. A identificação aumenta.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 — FEATURE</span>
+      <div class="feature-name">Personalização por Canal</div>
+      <p class="feature-what">Ajusta o tamanho e o formato para WhatsApp, Reels, TV, debate e rádio.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Cada canal tem um jeito e um tempo. Mensagem errada no canal errado é invisível.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">WhatsApp: 20 segundos direto. Reels: 35 segundos com hook forte. TV: 30 segundos mais institucional. Mesma mensagem. Impacto máximo em cada canal.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE: PRODUÇÃO -->
+<div class="module-section">
+  <div class="module-header">
+    <div>
+      <h2 class="module-big-name">PRODUÇÃO</h2>
+      <p class="module-desc">Produção AI Contínua</p>
+    </div>
+    <div class="module-tag">MÓDULO 08</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01 — FEATURE</span>
+      <div class="feature-name">Produção AI</div>
+      <p class="feature-what">Gera peças e variações com padrão e organização. Campanha rodando com cadência, não no desespero.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Sem produção constante você some e perde a disputa de atenção.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Enquanto o adversário aparece 2 vezes por semana, você aparece todos os dias com mensagens diferentes, mas coerentes. Presença vira percepção de força.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02 — FEATURE</span>
+      <div class="feature-name">Rotina de Entrega</div>
+      <p class="feature-what">Mantém produção contínua e previsível. Campanha não pode depender de inspiração.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Timing é tudo. E timing depende de estrutura, não de sorte.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Calendário semanal de produção e publicação, com peças já preparadas para cenários prováveis. Quando o imprevisto acontece, a operação não para.</p>
+      </div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03 — FEATURE</span>
+      <div class="feature-name">Organização por Objetivo</div>
+      <p class="feature-what">Separa peças por função: mobilizar, engajar, defender, informar. Cada peça tem papel.</p>
+      <div class="feature-why">
+        <span class="feature-why-label">↳ RESULTADO</span>
+        <p class="feature-why-text">Peça sem função vira ruído. Ruído não vence eleição.</p>
+      </div>
+      <div class="feature-example">
+        <span class="feature-example-label">EXEMPLO 2026</span>
+        <p class="feature-example-text">Numa semana de ataque, prioridade é defesa e clareza. Numa semana de crescimento, prioridade é alcance e identificação. A produção segue a estratégia.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BEFORE / AFTER -->
+
+
+<section id="before-after">
+  <div class="section-label">Transformação</div>
+  <h2>O QUE<br><span class="dim">MUDA TUDO</span></h2>
+  <div class="ba-grid reveal">
+    <div class="ba-col ba-col-before">
+      <span class="ba-label">ANTES — SEM REBORN AI</span>
+      <ul class="ba-items">
+        <li><span class="ba-icon">✕</span> Reage tarde, quando a crise já virou manchete</li>
+        <li><span class="ba-icon">✕</span> Fala igual para todo mundo, engaja ninguém</li>
+        <li><span class="ba-icon">✕</span> Gasta alto em produção, sem testar antes</li>
+        <li><span class="ba-icon">✕</span> Decisão por intuição do gabinete, não por dados</li>
+        <li><span class="ba-icon">✕</span> Presença inconsistente, adversário dita o ritmo</li>
+        <li><span class="ba-icon">✕</span> Campanha que some quando mais precisa aparecer</li>
+      </ul>
+    </div>
+    <div class="ba-col ba-col-after">
+      <span class="ba-label">DEPOIS — COM REBORN AI</span>
+      <ul class="ba-items">
+        <li><span class="ba-icon">✓</span> Vê a crise nascendo, age antes do estrago</li>
+        <li><span class="ba-icon">✓</span> Mensagem por região, por grupo, por canal</li>
+        <li><span class="ba-icon">✓</span> Testa antes de investir, amplifica o que funciona</li>
+        <li><span class="ba-icon">✓</span> Decisão com dados de campanhas que já venceram</li>
+        <li><span class="ba-icon">✓</span> Produção diária com padrão, cadência e objetivo</li>
+        <li><span class="ba-icon">✓</span> Candidato presente em todo lugar, sem agenda impossível</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="thirty">
+  <div class="section-label">Resultado</div>
+  <h2>30 DIAS DE<br><span class="dim">PLATAFORMA ATIVA</span></h2>
+  <div class="thirty-items reveal">
+    <div class="thirty-item">
+      <div class="thirty-day-num">01</div>
+      <div class="thirty-title">Narrativa Controlada</div>
+      <p class="thirty-text">Você para de reagir ao adversário e começa a ditar a pauta.</p>
+    </div>
+    <div class="thirty-item">
+      <div class="thirty-day-num">02</div>
+      <div class="thirty-title">Zero Susto de Crise</div>
+      <p class="thirty-text">Alertas antecipados e plano de reação prontos antes de precisar.</p>
+    </div>
+    <div class="thirty-item">
+      <div class="thirty-day-num">03</div>
+      <div class="thirty-title">Mensagem Regional</div>
+      <p class="thirty-text">Cada praça ouve o que quer ouvir. Identificação real, não promessa genérica.</p>
+    </div>
+    <div class="thirty-item">
+      <div class="thirty-day-num">04</div>
+      <div class="thirty-title">Mídia Eficiente</div>
+      <p class="thirty-text">Só amplifica o que já testou. Menos desperdício, mais impacto por real.</p>
+    </div>
+    <div class="thirty-item">
+      <div class="thirty-day-num">05</div>
+      <div class="thirty-title">Presença Permanente</div>
+      <p class="thirty-text">Candidato em todo lugar, mais vezes, sem agenda impossível.</p>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="section-label">Por que nós</div>
+  <h2>ESTRATÉGIA<br><span class="dim">DADOS<br>EXECUÇÃO</span></h2>
+  <div class="why-grid">
+    <div class="why-items">
+      <div class="why-item">
+        <span class="why-item-num">01</span>
+        <div class="why-item-content">
+          <div class="why-item-title">Sistema Integrado, Não Ferramenta Solta</div>
+          <p class="why-item-text">Cada módulo alimenta o outro. RADAR alimenta ESCUDO. MAPA alimenta VOZES. PLANO alimenta FÁBRICA. É uma máquina, não uma lista de apps.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-item-num">02</span>
+        <div class="why-item-content">
+          <div class="why-item-title">Dados de Quem Já Venceu</div>
+          <p class="why-item-text">A plataforma aprende com campanhas vitoriosas do grupo. Você não começa do zero. Começa de onde os melhores pararam.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-item-num">03</span>
+        <div class="why-item-content">
+          <div class="why-item-title">Painel Simples para o Assessor</div>
+          <p class="why-item-text">Toda semana: o que está subindo agora, o que vira crise amanhã, o que produzir hoje. Sem complexidade técnica. Direto para decisão.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-item-num">04</span>
+        <div class="why-item-content">
+          <div class="why-item-title">Execução em Escala Real</div>
+          <p class="why-item-text">Não é consultoria. Não é relatório. É produção rodando. Peças no ar, discurso personalizado, presença diária — tudo entregue.</p>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual why-img-slot img-slot">
+      <img src="img/why-team.jpg" alt="Equipe Reborn AI Magnopus"
+        onload="this.classList.add('loaded')" onerror="this.style.display='none'">
+      <div class="ph">
+        <div class="ph-icon">🎯</div>
+        <div class="ph-title">POR QUE NÓS — IMAGEM</div>
+        <div class="ph-file">img/why-team.jpg</div>
+        <div class="ph-desc">War room em operação, equipe em frente a telas, candidato sendo monitorado, dashboard ao vivo</div>
+        <div class="ph-size">IDEAL: 800×760px — JPG</div>
+      </div>
+    </div>
+    <!-- backup visual below if no image -->
+    <div class="why-visual" style="display:none">
+      <span class="magnopus-badge">POWERED BY MAGNOPUS STANDARD</span>
+      <div class="magnopus-title">REBORN<br><span>AI</span></div>
+      <p class="magnopus-text">A única plataforma que une inteligência de dados, previsibilidade de crise e produção AI em escala — no mesmo lugar, para o mesmo objetivo: <strong style="color: var(--white);">vencer em 2026.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="live-indicator">
+    <div class="live-dot"></div>
+    COMEÇAR AGORA DÁ VANTAGEM INJUSTA
+  </div>
+  <h2>PRONTO<br>PARA<br>GANHAR?</h2>
+  <p class="section-body">Primeiro passo: montar o <strong>Mapa de Risco + Mapa de Desejos</strong> por Região e ativar o RADAR.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-primary">Ativar a plataforma →</a>
+    <a href="#modules" class="btn-secondary">Ver os módulos</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">REBORN <span>AI</span></div>
+  <div class="footer-powered">POWERED BY REBORN AI STANDARD • 2026</div>
+</footer>
+
+<script>
+
+  // Copy prompt function
+  function copyPrompt(id, btn) {
+    const el = document.getElementById(id);
+    const text = el.innerText;
+    navigator.clipboard.writeText(text).catch(() => {}).then(() => {
+      btn.classList.add('copied');
+      btn.innerHTML = '<span>✓</span> COPIADO!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span class=\"copy-icon\">⎘</span> COPIAR PROMPT'; }, 2500);
+    });
+  }
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 80);
+  });
+
+  // Progress bar
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = pct + '%';
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Animate counters
+  function animateValue(el, start, end, duration, suffix='') {
+    let startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      const val = Math.floor(progress * (end - start) + start);
+      el.textContent = val + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const statObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const nums = e.target.querySelectorAll('.stat-num');
+        nums.forEach(n => {
+          const text = n.textContent;
+          if (text === '8') animateValue(n, 0, 8, 1200);
+          if (text.includes('40')) { n.textContent = '+0×'; animateValue({textContent:'0'}, 0, 40, 1500); setTimeout(() => n.textContent = '+40×', 1500); }
+        });
+        statObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  const heroStats = document.querySelector('.hero-stats');
+  if (heroStats) statObserver.observe(heroStats);
+</script>
+</body>
+</html>
